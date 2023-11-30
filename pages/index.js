@@ -1,8 +1,14 @@
 import Tabs from "react-responsive-tabs";
+import CardComponent from "../component/CardComponent";
+import { useState } from "react";
 
 const HomePage = ({ product, newCategories }) => {
-  console.log(product);
-  console.log(newCategories);
+  const [cart, setCart] = useState([]);
+  const addItem = (item) => {
+    setCart([...cart, { title: item.title, price: item.price }]);
+  };
+  console.log(cart);
+
   function getTabs() {
     {
       return Object.keys(newCategories).length > 0
@@ -13,9 +19,15 @@ const HomePage = ({ product, newCategories }) => {
                 <div className="tab-body-content">
                   <div className="tab-content">
                     {newCategories[tab].map((item, index) => (
-                      <p className="title" key={index}>
-                        {item.title}
-                      </p>
+                      <div className="items" key={index}>
+                        <CardComponent
+                          image={item.image}
+                          title={item.title}
+                          description={item.description}
+                          price={item.price}
+                          addItem={addItem}
+                        />
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -35,6 +47,18 @@ const HomePage = ({ product, newCategories }) => {
       <h1>products!</h1>
       <div className="responsive-tab-accordian">
         <Tabs items={getTabs()} showMore={false} />
+      </div>
+      <div className="myCart">
+        <h1 className="cart-title">My Cart</h1>
+        {cart.length > 0 &&
+          cart.map((item) => {
+            return (
+              <div key={Math.random()}>
+                <p>{item.title}</p>
+                <h3>{item.price}</h3>
+              </div>
+            );
+          })}
       </div>
     </div>
   );
